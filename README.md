@@ -31,7 +31,7 @@ There should be one project repository per group. If you clone/fork/whatever a p
 
 Example of error with sh:
 
-```
+```c
 julien@ubuntu:/# echo "qwerty" | /bin/sh
 /bin/sh: 1: qwerty: not found
 julien@ubuntu:/# echo "qwerty" | /bin/../bin/sh
