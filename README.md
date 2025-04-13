@@ -31,25 +31,28 @@ There should be one project repository per group. If you clone/fork/whatever a p
 
 Example of error with sh:
 
-```
+```bash
 julien@ubuntu:/# echo "qwerty" | /bin/sh
 /bin/sh: 1: qwerty: not found
 julien@ubuntu:/# echo "qwerty" | /bin/../bin/sh
 /bin/../bin/sh: 1: qwerty: not foun
-```
+```bash
 
 Same error with your program hsh:
 
-```
+```bash
+
 julien@ubuntu:/# echo "qwerty" | ./hsh
 ./hsh: 1: qwerty: not found
 julien@ubuntu:/# echo "qwerty" | ./././hsh
 ./././hsh: 1: qwerty: not found
-```
+
+```bash
 
 ## List of allowed functions and system calls+
 
-```
+```bash
+
 all functions from string.h
 access (man 2 access)
 chdir (man 2 chdir)
@@ -87,32 +90,38 @@ waitpid (man 2 waitpid)
 wait3 (man 2 wait3)
 wait4 (man 2 wait4)
 write (man 2 write)
-```
+
+```bash
 
 ### Compilation
 
 - Your code will be compiled this way:
 
-```
+```bash
+
 $ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -Wno-format *.c
-```
+
+```bash
 
 ### Testing
 
 Your shell should work like this in interactive mode:
 
-```
+```bash
+
 julien@ubuntu:/# ./hsh
 ($) /bin/ls
 hsh main.c shell.c
 ($)
 ($) exit
 julien@ubuntu:/#
-```
+
+```bash
 
 But also in non-interactive mode:
 
-```
+```bash
+
 julien@ubuntu:/# echo "/bin/ls" | ./hsh
 hsh main.c shell.c test_ls_2
 julien@ubuntu:/# cat test_ls_2
@@ -122,6 +131,7 @@ julien@ubuntu:/# cat test_ls_2 | ./hsh
 hsh main.c shell.c test_ls_2
 hsh main.c shell.c test_ls_2
 julien@ubuntu:/#
+
 ```
 
 ### Checks
