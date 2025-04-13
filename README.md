@@ -27,5 +27,5 @@ The work had to follow strict technical guidelines, including rules on coding st
 ## Authors
 
 [Benjamin Estrada](https://github.com/Aluranae)  
-[Warren](https://github.com/Warrre)  
-[Nawfel](https://github.com/nawfel83)
+[Nawfel](https://github.com/nawfel83)  
+[Warren](https://github.com/Warrre)
