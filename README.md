@@ -142,6 +142,8 @@ After the deadline, you will need to fork the repository if it’s not on your G
 
 ## Description of Simple shell
 
+The Simple Shell project involves recreating a simplified command interpreter, similar to /bin/sh, in the C language. It is a program that allows the user to execute commands online, just like in a real Linux terminal.
+
 ## The man page
 
 ## The Flowchart of Simple Shell
