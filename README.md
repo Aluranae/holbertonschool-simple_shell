@@ -148,15 +148,21 @@ After the deadline, you will need to fork the repository if it’s not on your G
 
 ## File organisation
 
-`string_utils.c` & `string_utils2.c`:
+`builtin_utils.c`:
 
-`input_utils.c`:
+`core_shell.c`:
 
 `env_utils.c`:
 
-`builtin_utils.c`:
+`execute_command.c`:
+
+`input_utils.c`:
 
 `main.h`:
+
+`string_utils.c` & `string_utils2.c`:
+
+## Memory Leak Testing with Valgrind
 
 ## Tests
 
