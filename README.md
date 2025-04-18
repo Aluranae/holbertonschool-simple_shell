@@ -40,7 +40,7 @@ julien@ubuntu:/# echo "qwerty" | /bin/../bin/sh
 
 Same error with your program hsh:
 
-```
+```c
 
 julien@ubuntu:/# echo "qwerty" | ./hsh
 ./hsh: 1: qwerty: not found
@@ -51,7 +51,7 @@ julien@ubuntu:/# echo "qwerty" | ./././hsh
 
 ## List of allowed functions and system calls+
 
-```
+```c
 
 all functions from string.h
 access (man 2 access)
@@ -97,7 +97,7 @@ write (man 2 write)
 
 - Your code will be compiled this way:
 
-```
+```c
 
 $ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -Wno-format *.c
 
@@ -107,7 +107,7 @@ $ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -Wno-format *.c
 
 Your shell should work like this in interactive mode:
 
-```
+```c
 
 julien@ubuntu:/# ./hsh
 ($) /bin/ls
@@ -120,7 +120,7 @@ julien@ubuntu:/#
 
 But also in non-interactive mode:
 
-```
+```c
 
 julien@ubuntu:/# echo "/bin/ls" | ./hsh
 hsh main.c shell.c test_ls_2
@@ -147,6 +147,16 @@ After the deadline, you will need to fork the repository if it’s not on your G
 ## The Flowchart of Simple Shell
 
 ## File organisation
+
+`string_utils.c` & `string_utils2.c`:
+
+`input_utils.c`:
+
+`env_utils.c`:
+
+`builtin_utils.c`:
+
+`main.h`:
 
 ## Tests
 
