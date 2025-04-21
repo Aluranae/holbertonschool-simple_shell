@@ -17,7 +17,7 @@ The work had to follow strict technical guidelines, including rules on coding st
 - [Memory Leak Testing with Valgrind](#memory-leak-testing-with-valgrind)
 - [Tests](#tests)
 - [Examples](#examples)
-- [How to contribute](#-how-to-contribute)
+- [How to contribute](#how-to-contribute)
 - [Authors](#authors)
 
 ## Technical requirements and constraints
