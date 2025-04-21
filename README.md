@@ -156,11 +156,19 @@ After the deadline, you will need to fork the repository if it’s not on your G
 
 ## Description of Simple shell
 
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
+
 ## The man page
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
 
 ## The Flowchart of Simple Shell
 
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
+
 ## File organisation
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
 
 `builtin_utils.c`:
 
@@ -178,15 +186,27 @@ After the deadline, you will need to fork the repository if it’s not on your G
 
 ## Main Functions & Return Values
 
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
+
 ## Memory Leak Testing with Valgrind
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
 
 ## Tests
 
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
+
 ## Examples
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
 
 ## How to contribute
 
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
+
 ## Authors
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
 
 [Benjamin Estrada](https://github.com/Aluranae)  
 [Nawfel](https://github.com/nawfel83)  
