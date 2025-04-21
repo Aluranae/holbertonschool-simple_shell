@@ -6,6 +6,20 @@ This project is part of my curriculum at Holberton School. It is the second majo
 Carried out in collaboration with two other students, the goal was to build our own Unix command-line interpreter, called Simple Shell.
 The work had to follow strict technical guidelines, including rules on coding style, modularity, and performance. All the requirements and constraints are detailed in the following sections of this README.
 
+## Navigation
+
+- [Technical requirements and constraints](#technical-requirements-and-constraints)
+- [Description of Simple Shell](#description-of-simple-shell)
+- [The man page](#the-man-page)
+- [The Flowchart of Simple Shell](#the-flowchart-of-simple-shell)
+- [File organisation](#file-organisation)
+- [Main Functions & Return Values](#main-functions--return-values)
+- [Memory Leak Testing with Valgrind](#memory-leak-testing-with-valgrind)
+- [Tests](#tests)
+- [Examples](#examples)
+- [How to contribute](#-how-to-contribute)
+- [Authors](#authors)
+
 ## Technical requirements and constraints
 
 - Allowed editors: vi, vim, emacs
@@ -169,8 +183,6 @@ After the deadline, you will need to fork the repository if it’s not on your G
 ## Tests
 
 ## Examples
-
-## Output:
 
 ## How to contribute
 
