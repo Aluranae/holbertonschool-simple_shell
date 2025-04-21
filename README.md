@@ -162,6 +162,8 @@ After the deadline, you will need to fork the repository if it’s not on your G
 
 `string_utils.c` & `string_utils2.c`:
 
+## Main Functions & Return Values
+
 ## Memory Leak Testing with Valgrind
 
 ## Tests
