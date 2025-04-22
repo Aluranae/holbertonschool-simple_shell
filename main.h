@@ -47,6 +47,8 @@ int handle_builtin(char **args, char *line);
 int execute_command(char **args, char **argv, int line_number, char *line);
 int launch_process(char *path, char **args);
 
+int core_shell(char **argv);
+
 /* Fonctions gestions strings */
 
 unsigned int _strlen(const char *s);

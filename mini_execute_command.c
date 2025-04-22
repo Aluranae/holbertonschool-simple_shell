@@ -26,14 +26,12 @@ int execute_command(char **args, char **argv, int line_number, char *line)
 	if (args[0] == NULL)
 		return (1);
 
-	/* Étape 2 : Vérifier si la commande est exécutable telle quelle */
 	if (access(args[0], X_OK) == 0)
 	{
-		command_path = args[0];  /* Commande avec chemin absolu ou relatif */
+		command_path = args[0];
 	}
 	else
 	{
-		/* Étape 3 : Rechercher la commande dans le PATH */
 		command_path = find_command_path(args[0]);
 		if (command_path == NULL)
 		{
@@ -42,7 +40,6 @@ int execute_command(char **args, char **argv, int line_number, char *line)
 		}
 	}
 
-	/* Étape 4 : Créer un processus fils */
 	pid = fork();
 	if (pid == -1)
 	{
@@ -72,5 +69,5 @@ int execute_command(char **args, char **argv, int line_number, char *line)
 		free(command_path);
 
 	/* Étape 8 : Retourner 1 pour continuer la boucle du shell */
-	return (1);
+	return (WEXITSTATUS(status));
 }
