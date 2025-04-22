@@ -3,7 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 #include "shell.h"
 
 /* Fonction pour obtenir le PID du processus actuel */
