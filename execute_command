@@ -38,7 +38,7 @@ int execute_command(char **args, char **argv, int line_number, char *line)
 		/* Si la commande n’est pas trouvée, afficher une erreur */
 		/* avec le numéro de ligne */
 		fprintf(stderr, "%s: %d: %s: not found\n", argv[0], line_number, args[0]);
-		return (0); /* Code de retour standard pour "commande introuvable" */
+		return (127); /* Code de retour standard pour "commande introuvable" */
 	}
 
 	/* vérifier les permissions d’exécution du fichier trouvé */
