@@ -6,6 +6,20 @@ This project is part of my curriculum at Holberton School. It is the second majo
 Carried out in collaboration with two other students, the goal was to build our own Unix command-line interpreter, called Simple Shell.
 The work had to follow strict technical guidelines, including rules on coding style, modularity, and performance. All the requirements and constraints are detailed in the following sections of this README.
 
+## Navigation
+
+- [Technical requirements and constraints](#technical-requirements-and-constraints)
+- [Description of Simple Shell](#description-of-simple-shell)
+- [The man page](#the-man-page)
+- [The Flowchart of Simple Shell](#the-flowchart-of-simple-shell)
+- [File organisation](#file-organisation)
+- [Main Functions & Return Values](#main-functions--return-values)
+- [Memory Leak Testing with Valgrind](#memory-leak-testing-with-valgrind)
+- [Tests](#tests)
+- [Examples](#examples)
+- [How to contribute](#how-to-contribute)
+- [Authors](#authors)
+
 ## Technical requirements and constraints
 
 - Allowed editors: vi, vim, emacs
@@ -22,7 +36,19 @@ The work had to follow strict technical guidelines, including rules on coding st
 
 There should be one project repository per group. If you clone/fork/whatever a project repository with the same name before the second deadline, you risk a 0% score.
 
-## More Info
+## Description du Shell
+
+**Simple Shell** est un interpréteur de commandes écrit en C, qui permet d'exécuter des commandes dans un environnement Unix, comme un vrai terminal. Il prend en charge :
+
+- **Les modes interactif et non-interactif** : Le shell peut fonctionner à la fois dans un terminal interactif, où l'utilisateur peut entrer des commandes manuellement, et dans un mode non-interactif, où il exécute des commandes passées via un fichier ou un pipe.
+  
+- **Les commandes simples** : Il permet l'exécution de commandes de base comme `/bin/ls`, `/bin/pwd`, etc., exactement comme un shell standard.
+
+- **Les commandes internes** : Le shell implémente certaines commandes internes, comme `exit` (pour quitter le shell), `cd` (pour changer de répertoire), `env` (pour afficher les variables d'environnement), et `pid` (pour afficher le PID du processus actuel).
+
+- **La gestion des erreurs** : Le shell gère les erreurs telles que les commandes non trouvées, et affiche des messages d'erreur clairs en indiquant le nom du programme suivi de l'erreur spécifique. Exemple : `./hsh: 1: qwerty: not found`.
+
+- **L’exécution via `fork` et `execve`** : Lorsqu'une commande est entrée, le shell crée un processus fils avec `fork()`, puis exécute la commande dans ce processus via `execve()`. Si la commande est interne, elle est traitée directement par le shell sans créer de processus fils.
 
 ### Output
 
@@ -40,7 +66,7 @@ julien@ubuntu:/# echo "qwerty" | /bin/../bin/sh
 
 Same error with your program hsh:
 
-```
+```c
 
 julien@ubuntu:/# echo "qwerty" | ./hsh
 ./hsh: 1: qwerty: not found
@@ -51,7 +77,7 @@ julien@ubuntu:/# echo "qwerty" | ./././hsh
 
 ## List of allowed functions and system calls+
 
-```
+```c
 
 all functions from string.h
 access (man 2 access)
@@ -97,7 +123,7 @@ write (man 2 write)
 
 - Your code will be compiled this way:
 
-```
+```c
 
 $ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -Wno-format *.c
 
@@ -107,7 +133,7 @@ $ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -Wno-format *.c
 
 Your shell should work like this in interactive mode:
 
-```
+```c
 
 julien@ubuntu:/# ./hsh
 ($) /bin/ls
@@ -120,7 +146,7 @@ julien@ubuntu:/#
 
 But also in non-interactive mode:
 
-```
+```c
 
 julien@ubuntu:/# echo "/bin/ls" | ./hsh
 hsh main.c shell.c test_ls_2
@@ -140,23 +166,43 @@ The Checker will be released at the end of the project (1-2 days before the dead
 
 After the deadline, you will need to fork the repository if it’s not on your Github account to be able to be corrected by the checker.
 
-## Description of Simple shell
-
-The Simple Shell project involves recreating a simplified command interpreter, similar to /bin/sh, in the C language. It is a program that allows the user to execute commands online, just like in a real Linux terminal.
-
 ## The man page
+
 
 ## The Flowchart of Simple Shell
 
+
 ## File organisation
 
-## Tests
+Le projet est structuré en plusieurs fichiers pour organiser le code de manière modulaire et maintenir une bonne lisibilité. Voici l'organisation des fichiers du projet :
 
-## Examples
+### 1. `shell_main.c`
+- **Description** : Point d'entrée principal du programme. Ce fichier contient la boucle principale du shell et gère l'interaction avec l'utilisateur.
+- **Responsabilités** :
+  - Affichage du prompt si le shell est en mode interactif.
+  - Lecture de l'entrée de l'utilisateur avec `getline()`.
+  - Découpage de l'entrée en arguments avec `strtok()`.
+  - Exécution des commandes internes ou externes (via `fork()` et `execve()`).
 
-## Output:
+### 2. `builtins.c`
+- **Description** : Contient les fonctions pour gérer les commandes internes du shell.
+- **Responsabilités** :
+  - Gère les commandes internes comme `exit`, `cd`, `env`, et `pid`.
+  - Implémente les comportements spécifiques de ces commandes sans faire appel à un processus externe.
 
-## How to contribute
+### 3. `pid.c`
+- **Description** : Ce fichier contient des fonctions liées à la gestion du PID (identifiant de processus).
+- **Responsabilités** :
+  - Fonction pour obtenir le PID du processus actuel via `getpid()`.
+  - Utilisé pour afficher le PID dans le shell lorsque l'utilisateur demande la commande `pid`.
+
+### 4. `shell.h`
+- **Description** : Fichier d'en-tête contenant les déclarations de fonctions et les bibliothèques nécessaires pour le projet.
+- **Responsabilités** :
+  - Déclarations des fonctions présentes dans `shell_main.c`, `builtins.c`, et `pid.c`.
+  - Inclusion des bibliothèques standard nécessaires (comme `stdio.h`, `stdlib.h`, `string.h`, etc.).
+
+---
 
 ## Authors
 
