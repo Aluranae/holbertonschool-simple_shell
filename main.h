@@ -46,6 +46,10 @@ int handle_env(char **args, char *line);
 int handle_builtin(char **args, char *line);
 int execute_command(char **args, char **argv, int line_number, char *line);
 int launch_process(char *path, char **args);
+int is_executable(char *path, char **argv, int line_number, char *cmd_name);
+
+
+int core_shell(char **argv);
 
 /* Fonctions gestions strings */
 

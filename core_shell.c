@@ -5,20 +5,17 @@
 #include <string.h>
 
 /**
- * main - Entry point of the shell.
+ * core_shell - Entry point of the shell.
  * Handles the main loop: prompt display, input reading,
  * parsing, command execution, and memory cleanup.
- * @argc: Number of arguments passed to the program (unused).
  * @argv: Array of arguments (used for error messages like argv[0]).
  * Return: Always 0.
  */
 
-int main(int argc, char **argv)
+int core_shell(char **argv)
 {
 	char *line = NULL, **args;
-	int line_number = 1, result;
-
-	(void)argc; /* inutilisé */
+	int line_number = 1, result, last_status = 0;
 
 	while (1)
 	{
@@ -26,7 +23,7 @@ int main(int argc, char **argv)
 			write(STDOUT_FILENO, "$ ", 2);
 
 		line = read_input();
-		if (line == NULL) /* Ctrl+D */
+		if (line == NULL)
 		{
 			if (isatty(STDIN_FILENO))
 				write(STDOUT_FILENO, "\n", 1);
@@ -51,8 +48,10 @@ int main(int argc, char **argv)
 		free(line);
 		line_number++;
 
+		last_status = result;
+
 		if (result == -1)
 			break;
 	}
-	return (0);
+	return (last_status);
 }
