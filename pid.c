@@ -1,6 +1,6 @@
-#include <unistd.h>
-#include <sys/types.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 /**
  * get_pid - Récupère le PID du processus actuel.
  * 

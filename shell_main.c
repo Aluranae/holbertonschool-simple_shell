@@ -78,7 +78,7 @@ int main(int argc, char *argv[], char **envp)
         if (strcmp(args[0], "exit") == 0)  /* Si la commande est "exit" */
         {
             free(args); /* Libérer la mémoire allouée pour les arguments */
-            exit_shell(args[0]);    /* Quitter le shell */
+            exit_shell(NULL);  /* Quitter le shell */
         }
         else if (strcmp(args[0], "cd") == 0)  /* Si la commande est "cd" (changer de répertoire) */
         {
@@ -117,7 +117,7 @@ int main(int argc, char *argv[], char **envp)
                 exit(127);  /* Quitter le processus fils avec un code d'erreur */
             }
         }
-        else if (process_pid > 0)  // Si c'est le processus parent
+        else if (process_pid > 0)  /* Si c'est le processus parent */
         {
             wait(NULL);  /* Attendre la fin du processus fils */
         }
