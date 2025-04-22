@@ -29,27 +29,23 @@ typedef struct builtin_s
 
 /* Fonctions gestion de l'input */
 
-void split_line(char *line, char **args);
+char **split_line(char *line);
 char *read_input(void);
 int is_line_empty(const char *line);
-
+void free_args(char **args);
 
 /* Fonctions variables d'environnement */
 
 char *_getenv(const char *name);
 char *find_command_path(char *command);
 
-
 /* Fonctions du shell */
 
 int handle_exit(char **args, char *line);
 int handle_env(char **args, char *line);
 int handle_builtin(char **args, char *line);
-
-
-int execute_command(char **args, char **argv, int line_number);
-
-
+int execute_command(char **args, char **argv, int line_number, char *line);
+int launch_process(char *path, char **args);
 
 /* Fonctions gestions strings */
 
