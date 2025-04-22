@@ -19,39 +19,31 @@ int execute_command(char **args, char **argv, int line_number, char *line)
 {
 	pid_t pid;
 	int status;
-	char *command_path;
-
 	(void)line;
 
+	/* Étape 1 : Vérifier si l'entrée est vide */
 	if (args[0] == NULL)
 		return (1);
 
-	if (access(args[0], X_OK) == 0)
+	/* Étape 2 : Vérifier si la commande est exécutable directement */
+	if (access(args[0], X_OK) != 0)
 	{
-		command_path = args[0];
-	}
-	else
-	{
-		command_path = find_command_path(args[0]);
-		if (command_path == NULL)
-		{
-			fprintf(stderr, "%s: %d: %s: not found\n", argv[0], line_number, args[0]);
-			return (127);
-		}
+		fprintf(stderr, "%s: %d: %s: not found\n", argv[0], line_number, args[0]);
+		return (127);
 	}
 
+	/* Étape 3 : Créer un processus fils */
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
-		if (command_path != args[0])
-			free(command_path);
 		return (1);
 	}
 
+	/* Étape 4 : Dans le fils, exécuter la commande */
 	if (pid == 0)
 	{
-		if (execve(command_path, args, environ) == -1)
+		if (execve(args[0], args, environ) == -1)
 		{
 			perror("execve");
 			exit(1);
@@ -59,11 +51,10 @@ int execute_command(char **args, char **argv, int line_number, char *line)
 	}
 	else
 	{
+		/* Étape 5 : Attendre la fin du processus fils */
 		wait(&status);
 	}
 
-	if (command_path != args[0])
-		free(command_path);
-
+	/* Étape 6 : Retourner 1 pour continuer */
 	return (1);
 }
