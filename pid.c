@@ -8,5 +8,10 @@
  */
 pid_t get_pid(void)
 {
-    return getpid();  /* Retourne le PID du processus actuel */
+    pid_t pid = getpid();
+    if (pid == -1) {
+        perror("Error retrieving PID");
+        exit(1);  /* Quitter en cas d'erreur */
+    }
+    return pid;
 }
