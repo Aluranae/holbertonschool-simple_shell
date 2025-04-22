@@ -6,69 +6,35 @@
 #include <stdio.h>
 
 /**
- * execute_command - Exécute une commande avec ou sans PATH.
- * @args: Commande tokenisée (ex: {"ls", NULL}).
- * @argv: Nom du programme (argv[0]) pour les messages d'erreur.
- * @line_number: Numéro de ligne pour affichage en cas d'erreur.
- * @line: Ligne brute de l'utilisateur (non utilisée ici).
- *
- * Return: Code de sortie de la commande ou code d’erreur (127, 126).
- */
-int execute_command(char **args, char **argv, int line_number, char *line)
+* is_executable - Vérifie si un fichier est exécutable.
+* @path: Chemin de la commande.
+* @argv: argv[0] pour le message d'erreur.
+* @line_number: Numéro de ligne pour affichage.
+* @cmd_name: Nom réel de la commande (args[0]).
+*
+* Return: 0 si exécutable, 126 sinon.
+*/
+
+int is_executable(char *path, char **argv, int line_number, char *cmd_name)
 {
-	int status;
-	char *command_path;
-
-	(void)line;
-
-	if (args[0] == NULL)
-		return (1);
-
-	if (_strchr(args[0], '/') != NULL)
+	if (access(path, X_OK) != 0)
 	{
-		command_path = args[0];
-		if (access(command_path, X_OK) != 0)
-		{
-			fprintf(stderr, "%s: %d: %s: Permission denied\n",
-				argv[0], line_number, args[0]);
-			return (126);
-		}
+		fprintf(stderr, "%s: %d: %s: Permission denied\n",
+			argv[0], line_number, cmd_name);
+		return (126);
 	}
-	else
-	{
-		command_path = find_command_path(args[0]);
-		if (command_path == NULL)
-		{
-			fprintf(stderr, "%s: %d: %s: not found\n",
-				argv[0], line_number, args[0]);
-			return (127);
-		}
-
-		if (access(command_path, X_OK) != 0)
-		{
-			fprintf(stderr, "%s: %d: %s: Permission denied\n",
-				argv[0], line_number, args[0]);
-			free(command_path);
-			return (126);
-		}
-	}
-
-	status = launch_process(command_path, args);
-
-	if (command_path != args[0])
-		free(command_path);
-
-	return (status);
+	return (0);
 }
 
 /**
- * launch_process - Crée un processus fils pour exécuter une commande.
- * @path: Chemin absolu ou relatif de la commande à exécuter.
- * @args: Tableau d'arguments pour la commande.
- *
- * Return: Code de sortie du processus exécuté.
- */
-int launch_process(char *path, char **args)
+* launch_process - Lance le processus avec fork + execve.
+* @command_path: Chemin complet de la commande.
+* @args: Commande tokenisée.
+*
+* Return: Code de sortie de la commande.
+*/
+
+int launch_process(char *command_path, char **args)
 {
 	pid_t pid;
 	int status;
@@ -79,10 +45,9 @@ int launch_process(char *path, char **args)
 		perror("fork");
 		return (1);
 	}
-
 	if (pid == 0)
 	{
-		if (execve(path, args, environ) == -1)
+		if (execve(command_path, args, environ) == -1)
 		{
 			perror("execve");
 			exit(1);
@@ -92,6 +57,57 @@ int launch_process(char *path, char **args)
 	{
 		wait(&status);
 	}
-
 	return (WEXITSTATUS(status));
+}
+
+/**
+ * execute_command - Exécute une commande avec ou sans PATH.
+ * @args: Commande tokenisée.
+ * @argv: argv[0] pour les messages d'erreur.
+ * @line_number: Numéro de ligne pour les erreurs.
+ * @line: Ligne brute de l'utilisateur (non utilisée ici).
+ *
+ * Return: Code d'exécution (0, 1, 126, 127).
+ */
+
+int execute_command(char **args, char **argv, int line_number, char *line)
+{
+	char *command_path;
+	int exec_check;
+
+	(void)line;
+
+	if (args[0] == NULL)
+		return (1);
+
+	if (_strchr(args[0], '/') != NULL)
+	{
+		command_path = args[0];
+		exec_check = is_executable(command_path, argv, line_number, args[0]);
+		if (exec_check != 0)
+			return (exec_check);
+	}
+	else
+	{
+		command_path = find_command_path(args[0]);
+		if (command_path == NULL)
+		{
+			fprintf(stderr, "%s: %d: %s: not found\n",
+				argv[0], line_number, args[0]);
+			return (127);
+		}
+		exec_check = is_executable(command_path, argv, line_number, args[0]);
+		if (exec_check != 0)
+		{
+			free(command_path);
+			return (exec_check);
+		}
+	}
+
+	exec_check = launch_process(command_path, args);
+
+	if (command_path != args[0])
+		free(command_path);
+
+	return (exec_check);
 }
