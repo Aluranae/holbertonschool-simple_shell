@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 /**
- * exit_shell - Quitte le shell proprement.
- * @command: La commande d'exécution (pour gérer des actions spécifiques si nécessaire).
+ * exit_shell - Exits the shell cleanly.
+ * @command: The execution command (to handle specific actions if necessary).
  */
+
 void exit_shell(char *command)
 {
     (void)command;  /* Le paramètre n'est pas utilisé ici */

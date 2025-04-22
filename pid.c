@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 /**
- * get_pid - Récupère le PID du processus actuel.
+ * get_pid - Retrieves the current process's PID.
  * 
- * Return: Le PID du processus actuel.
+ * Return: The PID of the current process.
  */
+
 pid_t get_pid(void)
 {
     pid_t pid = getpid();
