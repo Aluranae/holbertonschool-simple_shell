@@ -26,34 +26,20 @@ int execute_command(char **args, char **argv, int line_number, char *line)
 	if (args[0] == NULL)
 		return (1);
 
-	/* Étape 2 : Résolution du chemin de la commande */
-if (_strchr(args[0], '/') != NULL)
-{
-	/* La commande contient un slash : on ne cherche pas dans le PATH */
-	command_path = args[0];
-}
-else
-{
-	/* 2.a Sinon, on cherche dans les répertoires du PATH */
-	command_path = find_command_path(args[0]);
-	if (command_path == NULL)
+	if (access(args[0], X_OK) == 0)
 	{
-		fprintf(stderr, "%s: %d: %s: not found\n", argv[0], line_number, args[0]);
-		return (127);
+		command_path = args[0];
 	}
-}
-
-	/* Étape 3.5 : Vérifier les permissions */
-	if (access(command_path, X_OK) != 0)
+	else
 	{
-		fprintf(stderr, "%s: %d: %s: Permission denied\n",
-			argv[0], line_number, args[0]);
-		if (command_path != args[0])
-			free(command_path);
-		return (126);
+		command_path = find_command_path(args[0]);
+		if (command_path == NULL)
+		{
+			fprintf(stderr, "%s: %d: %s: not found\n", argv[0], line_number, args[0]);
+			return (127);
+		}
 	}
 
-	/* Étape 4 : Créer un processus fils */
 	pid = fork();
 	if (pid == -1)
 	{
