@@ -29,7 +29,7 @@ typedef struct builtin_s
 
 /* Fonctions gestion de l'input */
 
-void split_line(char *line, char **args);
+char **split_line(char *line);
 char *read_input(void);
 int is_line_empty(const char *line);
 void free_args(char **args);

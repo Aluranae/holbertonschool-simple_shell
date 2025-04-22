@@ -5,35 +5,47 @@
 #include <stddef.h> /* pour NULL*/
 #include <unistd.h> /* pour isatty, STDIN_FILENO */
 
+#define MAX_ARGS 64  /* Nombre maximal d'arguments pris en charge */
+
 /**
-* split_line - Découpe une ligne de commande en tokens
-* @line: Chaîne de caractères à découper
-* @args: Tableau qui contiendra les pointeurs vers les tokens
+* split_line - Découpe une ligne de commande en tokens (mots)
+* @line: Chaîne de caractères à analyser (modifiée par strtok)
 *
 * Cette fonction :
-* - Utilise les espaces et retours à la ligne comme délimiteurs
-* - Stocke chaque mot (token) dans le tableau args
-* - Termine le tableau par NULL
+* - Alloue dynamiquement un tableau de chaînes de caractères (char **)
+* - Utilise strtok pour découper la ligne en fonction des espaces
+*   et sauts de ligne
+* - Remplit le tableau avec chaque mot (token)
+* - Termine le tableau par un pointeur NULL, compatible avec execve
+*
+* Return: Un tableau de pointeurs vers les tokens, ou NULL si échec
 */
 
-void split_line(char *line, char **args)
+char **split_line(char *line)
 {
+	char **args;
 	char *token;
-
 	int i = 0;
 
-	/* 1. Extraire le premier token (séparé par espace ou retour à la ligne) */
+	/* Allouer de l'espace pour MAX_ARGS pointeurs */
+	args = malloc(sizeof(char *) * MAX_ARGS);
+	if (args == NULL)
+		return (NULL);
+
+	/* Extrait le premier mot (token) séparé par espace ou retour à la ligne */
 	token = strtok(line, " \n");
 
-	/* 2. Tant qu'il y a des tokens, les stocker dans le tableau args */
-	while (token != NULL)
+	/* Tant qu'on trouve des tokens, les stocker dans le tableau */
+	while (token != NULL && i < MAX_ARGS - 1)
 	{
 		args[i++] = token;
 		token = strtok(NULL, " \n");
 	}
 
-	/* 3. Terminer le tableau avec NULL */
+	/* Terminer le tableau par NULL pour compatibilité execve */
 	args[i] = NULL;
+
+	return (args);
 }
 
 /**
@@ -59,19 +71,12 @@ char *read_input(void)
 	/* Longueur de la ligne lue par getline, ou -1 si EOF/erreur */
 	ssize_t input_lenght = 0;
 
-	/* 4. Vérifier si l'entrée est interactive (isatty) */
-	/*    Si oui, afficher le prompt "$ " avec write */
-	if (isatty(STDIN_FILENO))
-	{
-	write(STDOUT_FILENO, "$ ", sizeof("$ ") - 1);
-	}
-
-	/* 5. Appeler getline() pour lire la ligne */
+	/* 4. Appeler getline() pour lire la ligne */
 	/*    - Passer l'adresse de line et de n */
 	/*    - Lire depuis stdin */
 	input_lenght = getline(&line, &n, stdin);
 
-	/* 6. Vérifier si getline a retourné -1 */
+	/* 5. Vérifier si getline a retourné -1 */
 	/*    - Si oui, free(line) si nécessaire et retourner NULL */
 	if (input_lenght == -1)
 	{
@@ -79,7 +84,7 @@ char *read_input(void)
 		return (NULL);
 	}
 
-	/* 7. Retourner le pointeur line (ligne lue) */
+	/* 6. Retourner le pointeur line (ligne lue) */
 	return (line);
 }
 
@@ -120,4 +125,18 @@ int is_line_empty(const char *line)
 	/* 3. Si la boucle se termine sans rencontrer de caractère utile */
 	/* 4. Retourner 1 pour indiquer que la ligne est vide ou inutile */
 	return (1);
+}
+
+/**
+* free_args - Libère la mémoire allouée pour un tableau de chaînes
+* @args: Tableau de pointeurs à libérer
+*
+* Cette fonction libère la mémoire allouée dynamiquement pour un tableau
+* de chaînes de caractères, si celui-ci n'est pas NULL.
+*/
+
+void free_args(char **args)
+{
+	if (args)
+		free(args);
 }
