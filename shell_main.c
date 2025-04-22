@@ -33,13 +33,14 @@ int print_env(char **env)
 }
 
 /**
- * main - Point d'entrée du programme shell.
- * @argc: Compteur d'arguments.
- * @argv: Tableau d'arguments.
- * @envp: Variables d'environnement.
+ * main - Entry point of the shell program.
+ * @argc: Argument count.
+ * @argv: Argument vector.
+ * @envp: Environment variables.
  *
- * Return: Toujours 0 (succès).
+ * Return: Always 0 (success).
  */
+
 int main(int argc, char *argv[], char **envp)
 {
     char *line_input = NULL;   /* Variable pour stocker la ligne d'entrée */
