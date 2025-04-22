@@ -37,14 +37,15 @@ int execute_command(char **args, char **argv, int line_number, char *line)
 	{
 		/* Si la commande n’est pas trouvée, afficher une erreur */
 		/* avec le numéro de ligne */
-		fprintf(stderr, "./hsh: %d: %s: not found\n", line_number, args[0]);
+		fprintf(stderr, "%s: %d: %s: not found\n", argv[0], line_number, args[0]);
 		return (127); /* Code de retour standard pour "commande introuvable" */
 	}
 
 	/* vérifier les permissions d’exécution du fichier trouvé */
 	if (access(path, X_OK) != 0)
 	{
-		fprintf(stderr, "./hsh: %d: %s: Permission denied\n", line_number, args[0]);
+		fprintf(stderr, "%s: %d: %s: Permission denied\n",
+			argv[0], line_number, args[0]);
 		free(path);
 		return (126); /* Code de retour standard pour "permission refusée" */
 	}
