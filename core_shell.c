@@ -54,5 +54,5 @@ int main(int argc, char **argv)
 		if (result == -1)
 			break;
 	}
-	return (0);
+	return (result);
 }
