@@ -180,6 +180,8 @@ After the deadline, you will need to fork the repository if it’s not on your G
 
 `input_utils.c`:
 
+`main.c`:
+
 `main.h`:
 
 `string_utils.c` & `string_utils2.c`:
