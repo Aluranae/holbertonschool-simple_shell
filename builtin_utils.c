@@ -16,6 +16,8 @@
 
 int handle_exit(char **args, char *line)
 {
+	(void)line;
+
 	/* 1. Vérifier si le premier token est NULL (aucune commande tapée) */
 	/*    - Si oui, retourner 0 */
 	if (args[0] == NULL)
@@ -25,15 +27,10 @@ int handle_exit(char **args, char *line)
 	/*    - Utiliser _strcmp() pour tester l'égalité */
 	if (_strcmp(args[0], "exit") == 0)
 	{
-		/* 3. Si c’est "exit" */
-		/* 3a. Libérer la ligne lue */
-		free(line);
-
-		/* 3b. Quitter proprement */
-		exit(0);
+		return (1);
 	}
 
-	/* 4. Si ce n’est pas "exit", retourner 0 */
+	/* 3. Si ce n’est pas "exit", retourner 0 */
 	return (0);
 }
 

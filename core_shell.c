@@ -43,6 +43,14 @@ int core_shell(char **argv)
 			continue;
 		}
 
+		/* Gestion de la commande "exit" */
+		if (handle_exit(args, line))
+		{
+			free(args);
+			free(line);
+			break;
+		}
+
 		result = execute_command(args, argv, line_number, line);
 		free(args);
 		free(line);
