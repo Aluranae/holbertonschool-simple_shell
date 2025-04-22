@@ -6,14 +6,15 @@
 #include <stdio.h>
 
 /**
- * execute_command - Exécute une commande avec ou sans PATH.
- * @args: Commande tokenisée (ex: {"ls", NULL}).
- * @argv: Nom du programme (argv[0]) pour les messages d'erreur.
- * @line_number: Numéro de ligne pour affichage en cas d'erreur.
- * @line: Ligne brute de l'utilisateur (non utilisée ici).
- *
- * Return: 1 pour continuer la boucle du shell, ou 127 si erreur.
- */
+* execute_command - Exécute une commande avec ou sans PATH.
+* @args: Commande tokenisée (ex: {"ls", NULL}).
+* @argv: Nom du programme (argv[0]) pour les messages d'erreur.
+* @line_number: Numéro de ligne pour affichage en cas d'erreur.
+* @line: Ligne brute de l'utilisateur (non utilisée ici).
+*
+* Return: 1 pour continuer la boucle du shell, ou 127 si erreur.
+*/
+
 int execute_command(char **args, char **argv, int line_number, char *line)
 {
 	pid_t pid;
@@ -26,20 +27,41 @@ int execute_command(char **args, char **argv, int line_number, char *line)
 	if (args[0] == NULL)
 		return (1);
 
-	if (access(args[0], X_OK) == 0)
+	/* Étape 2 : Déterminer le chemin de la commande */
+	if (_strchr(args[0], '/') != NULL)
 	{
+		/* La commande contient un slash → exécution directe */
 		command_path = args[0];
+
+		if (access(command_path, X_OK) != 0)
+		{
+			fprintf(stderr, "%s: %d: %s: Permission denied\n",
+				argv[0], line_number, args[0]);
+			return (126);
+		}
 	}
 	else
 	{
+		/* Sinon, chercher dans le PATH */
 		command_path = find_command_path(args[0]);
+
 		if (command_path == NULL)
 		{
-			fprintf(stderr, "%s: %d: %s: not found\n", argv[0], line_number, args[0]);
+			fprintf(stderr, "%s: %d: %s: not found\n",
+				argv[0], line_number, args[0]);
 			return (127);
+		}
+
+		if (access(command_path, X_OK) != 0)
+		{
+			fprintf(stderr, "%s: %d: %s: Permission denied\n",
+				argv[0], line_number, args[0]);
+			free(command_path);
+			return (126);
 		}
 	}
 
+	/* Étape 3 : fork + execve */
 	pid = fork();
 	if (pid == -1)
 	{
@@ -49,7 +71,6 @@ int execute_command(char **args, char **argv, int line_number, char *line)
 		return (1);
 	}
 
-	/* Étape 5 : Dans le fils, exécuter la commande */
 	if (pid == 0)
 	{
 		if (execve(command_path, args, environ) == -1)
@@ -60,14 +81,11 @@ int execute_command(char **args, char **argv, int line_number, char *line)
 	}
 	else
 	{
-		/* Étape 6 : Attendre la fin du processus fils */
 		wait(&status);
 	}
 
-	/* Étape 7 : Libérer le chemin alloué si nécessaire */
 	if (command_path != args[0])
 		free(command_path);
 
-	/* Étape 8 : Retourner 1 pour continuer la boucle du shell */
 	return (WEXITSTATUS(status));
 }
