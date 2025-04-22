@@ -164,6 +164,11 @@ After the deadline, you will need to fork the repository if it’s not on your G
 
 ## The Flowchart of Simple Shell
 
+Here is a global diagram of how our custom shell works.
+It follows the main execution loop of the shell, distinguishes internal commands (builtins) from external ones, and shows how errors are handled.
+
+![Flowchart](images/Flowchart_Shell.png)
+
 <p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
 
 ## File organisation
