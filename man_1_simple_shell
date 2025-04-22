@@ -1,1 +1,58 @@
-.TH simple_shel 1 "22/04/2025" "version 1.0"
+.TH simple_shell 1 "22/04/2025" "version 1.0"
+.SH NAME
+simple_shell \- A simple UNIX command line interpreter.
+
+.SH SYNOPSIS
+.B simple_shell
+.RI [ script_file ]
+
+.SH DESCRIPTION
+.B simple_shell
+is a simple implementation of a UNIX command line interpreter. It provides basic functionality for executing commands, handling built-in commands, and managing the environment.
+
+.SS Builtins
+The following built-in commands are supported:
+.TP
+.B exit
+Exit the shell.
+.TP
+.B env
+Print the current environment variables.
+
+.SH USAGE
+.TP
+.B Interactive mode:
+The shell displays a prompt and waits for the user to type a command. After executing the command, it displays the prompt again.
+.TP
+.B Non-interactive mode:
+The shell reads commands from a file or standard input and executes them.
+
+.SH EXAMPLES
+.TP
+.B Interactive mode:
+Run the shell and type commands:
+.EX
+$ ./hsh
+($) ls
+file1 file2
+($) exit
+.EE
+.TP
+.B Non-interactive mode:
+Provide commands via a script or pipe:
+.EX
+$ echo "ls" | ./hsh
+file1 file2
+.EE
+
+.SH AUTHORS
+.B Benjamin Estrada
+.RI ( https://github.com/Aluranae )
+.B Nawfel
+.RI ( https://github.com/nawfel83 )
+.B Warren
+.RI ( https://github.com/Warrre )
+
+.SH SEE ALSO
+.BR sh (1),
+.BR bash (1)
