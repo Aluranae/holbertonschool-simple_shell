@@ -14,10 +14,10 @@ is a simple implementation of a UNIX command line interpreter. It provides basic
 The following built-in commands are supported:
 .TP
 .B exit
-Exit the shell.
+Exit the shell. This command terminates the shell session.
 .TP
 .B env
-Print the current environment variables.
+Print the current environment variables. Useful for debugging or scripting.
 
 .SH USAGE
 .TP
