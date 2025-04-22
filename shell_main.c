@@ -3,39 +3,54 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include "shell.h"
+
+/* Fonction pour obtenir le PID du processus actuel */
+pid_t get_pid(void)
+{
+    return getpid();  /* Retourne le PID du processus actuel */
+}
+
+/* Fonction pour quitter le shell */
+void exit_shell(char *command)
+{
+    (void)command;  /* Argument non utilisé dans cette fonction */
+    exit(0);  /* Quitte le shell avec un code de succès */
+}
 
 /* Fonction pour afficher les variables d'environnement */
 int print_env(char **env)
 {
-	int i = 0;
+    int i = 0;
 
-	while (env[i] != NULL)                      /* Parcours des variables */
-	{
-		printf("%s\n", env[i]);              /* Affiche chaque variable */
-		i++;
-	}
-	return (0);
+    while (env[i] != NULL)  /* Parcours des variables d'environnement */
+    {
+        printf("%s\n", env[i]);  /* Affiche chaque variable d'environnement */
+        i++;
+    }
+
+    return 0;  /* Retourne 0 (succès) */
 }
 
 /**
- * main - The entry point of the shell program.
- * @argc: Argument count.
- * @argv: Argument vector.
- * @envp: Environment variables.
+ * main - Point d'entrée du programme shell.
+ * @argc: Compteur d'arguments.
+ * @argv: Tableau d'arguments.
+ * @envp: Variables d'environnement.
  *
- * Return: Always 0 (success).
+ * Return: Toujours 0 (succès).
  */
 int main(int argc, char *argv[], char **envp)
 {
-    char *line_input = NULL;  /* Variable pour stocker la ligne d'entrée */
-    char **args;              /* Tableau pour stocker les arguments */
-    size_t buffer_size = 0;   /* Taille du tampon d'entrée */
-    ssize_t input_length;     /* Longueur de l'entrée lue */
-    pid_t process_pid;        /* PID du processus fils */
-    int index = 0;            /* Index pour parcourir les arguments */
+    char *line_input = NULL;   /* Variable pour stocker la ligne d'entrée */
+    char **args;               /* Tableau pour stocker les arguments */
+    size_t buffer_size = 0;    /* Taille du tampon d'entrée */
+    ssize_t input_length;      /* Longueur de l'entrée lue */
+    pid_t process_pid;         /* PID du processus fils */
+    int index = 0;             /* Index pour parcourir les arguments */
 
-    (void)argc;  /* Les arguments ne sont pas utilisés ici */
+    (void)argc;  /* Les arguments ne sont pas utilisés dans cette fonction */
     (void)argv;
 
     while (1)  /* Boucle principale du shell */
@@ -53,8 +68,7 @@ int main(int argc, char *argv[], char **envp)
 
         line_input[strcspn(line_input, "\n")] = '\0';  /* Supprimer le caractère de nouvelle ligne à la fin de la commande */
 
-        /* Allocation dynamique de mémoire pour les arguments */
-        args = malloc(sizeof(char*) * (input_length / 2 + 1)); /* Allouer suffisamment d'espace pour les arguments */
+        args = malloc(sizeof(char*) * (input_length / 2 + 1));  /* Allocation dynamique de mémoire pour les arguments */
         if (!args)  /* Si l'allocation échoue */
         {
             perror("Erreur d'allocation");
@@ -77,7 +91,7 @@ int main(int argc, char *argv[], char **envp)
         /* Gestion des commandes internes */
         if (strcmp(args[0], "exit") == 0)  /* Si la commande est "exit" */
         {
-            free(args); /* Libérer la mémoire allouée pour les arguments */
+            free(args);  /* Libérer la mémoire allouée pour les arguments */
             exit_shell(NULL);  /* Quitter le shell */
         }
         else if (strcmp(args[0], "cd") == 0)  /* Si la commande est "cd" (changer de répertoire) */
@@ -99,12 +113,12 @@ int main(int argc, char *argv[], char **envp)
             free(args);  /* Libérer la mémoire allouée pour les arguments */
             continue;    /* Recommencer la boucle pour afficher le prompt */
         }
-		else if (strcmp(args[0], "pid") == 0)          /* Commande "pid" */
-		{
-			printf("PID actuel : %d\n", get_pid());   /* Affiche PID */
-			free(args);
-			continue;
-		}
+        else if (strcmp(args[0], "pid") == 0)  /* Commande "pid" */
+        {
+            printf("PID actuel : %d\n", get_pid());  /* Affiche PID */
+            free(args);
+            continue;
+        }
 
         /* Création d'un processus fils pour exécuter la commande */
         process_pid = fork();  /* Créer un processus fils */
@@ -130,5 +144,5 @@ int main(int argc, char *argv[], char **envp)
     }
 
     free(line_input);  /* Libérer la mémoire allouée pour la ligne d'entrée */
-    return 0;
+    return 0;  /* Terminer le programme */
 }
