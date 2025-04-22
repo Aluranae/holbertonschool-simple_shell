@@ -62,55 +62,42 @@ char *_getenv(const char *name)
 
 char *find_command_path(char *command)
 {
-	char *path;         /* chaîne pour stocker le PATH brut récupéré */
-	char *path_copy;    /* copie du PATH car strtok modifie la chaîne */
-	char *dir;          /* pointeur pour parcourir chaque dossier du PATH */
-	char *full_path;    /* variable pour construire chaque chemin temporaire */
-	size_t path_len;    /* taille totale nécessaire pour le chemin complet */
+	char *path, *path_copy, *dir, *full_path;
+	size_t path_len;
 
-	/* 2. Récupérer PATH via _getenv */
 	path = _getenv("PATH");
 	if (path == NULL)
 		return (NULL);
 
-	/* 3. Dupliquer PATH */
 	path_copy = _strdup(path);
 	if (path_copy == NULL)
 		return (NULL);
 
-	/* 4-5. Parcourir chaque dossier du PATH */
-	while ((dir = strtok(path_copy, ":")) != NULL)
+	dir = strtok(path_copy, ":");
+	while (dir != NULL)
 	{
-
-		/* Construire le chemin complet : répertoire + "/" + commande */
-		path_len = (_strlen(dir) + _strlen(command) + 2);
+		path_len = _strlen(dir) + _strlen(command) + 2;
 		full_path = malloc(path_len * sizeof(char));
 		if (full_path == NULL)
 		{
 			free(path_copy);
 			return (NULL);
 		}
+
 		_strcpy(full_path, dir);
 		_strcat(full_path, "/");
 		_strcat(full_path, command);
 
-		/* Vérifier si le chemin est exécutable */
 		if (access(full_path, X_OK) == 0)
 		{
-	
 			free(path_copy);
-			return (full_path);
-		}
-		else
-		{
-	
-			free(full_path);
+			return (full_path); /* trouvé ! */
 		}
 
-		/* Important : strtok(NULL, ":") pour continuer */
-		path_copy = NULL;
+		free(full_path);
+		dir = strtok(NULL, ":");
 	}
 
 	free(path_copy);
-	return (NULL);
+	return (NULL); /* non trouvé */
 }
