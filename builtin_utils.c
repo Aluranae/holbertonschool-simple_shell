@@ -1,5 +1,5 @@
 #include "main.h"
-#include <stdlib.h> /* Pour exit et free */
+#include <stdlib.h>		/* Pour exit et free */
 #include <unistd.h>     /* Pour write() */
 #include <stddef.h>     /* Pour NULL */
 #include <string.h>     /* Pour _strlen() si besoin */
