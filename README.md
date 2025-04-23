@@ -38,17 +38,17 @@ There should be one project repository per group. If you clone/fork/whatever a p
 
 ## Description du Shell
 
-**Simple Shell** est un interpréteur de commandes écrit en C, qui permet d'exécuter des commandes dans un environnement Unix, comme un vrai terminal. Il prend en charge :
+Simple Shell is a command-line interpreter written in C that allows the execution of commands in a Unix environment, just like a real terminal. It supports the following features:
 
-- **Les modes interactif et non-interactif** : Le shell peut fonctionner à la fois dans un terminal interactif, où l'utilisateur peut entrer des commandes manuellement, et dans un mode non-interactif, où il exécute des commandes passées via un fichier ou un pipe.
-  
-- **Les commandes simples** : Il permet l'exécution de commandes de base comme `/bin/ls`, `/bin/pwd`, etc., exactement comme un shell standard.
+Interactive and non-interactive modes: The shell can operate in an interactive terminal, where users manually enter commands, or in a non-interactive mode, where it executes commands passed through a file or a pipe.
 
-- **Les commandes internes** : Le shell implémente certaines commandes internes, comme `exit` (pour quitter le shell), `cd` (pour changer de répertoire), `env` (pour afficher les variables d'environnement), et `pid` (pour afficher le PID du processus actuel).
+Basic command execution: It allows execution of standard Unix commands such as /bin/ls, /bin/pwd, etc., just like a traditional shell.
 
-- **La gestion des erreurs** : Le shell gère les erreurs telles que les commandes non trouvées, et affiche des messages d'erreur clairs en indiquant le nom du programme suivi de l'erreur spécifique. Exemple : `./hsh: 1: qwerty: not found`.
+Built-in commands: The shell includes several built-in commands, such as exit (to exit the shell), cd (to change directories), env (to display environment variables), and pid (to display the current process ID).
 
-- **L’exécution via `fork` et `execve`** : Lorsqu'une commande est entrée, le shell crée un processus fils avec `fork()`, puis exécute la commande dans ce processus via `execve()`. Si la commande est interne, elle est traitée directement par le shell sans créer de processus fils.
+Error handling: The shell properly handles errors like "command not found" and displays clear messages indicating the program name followed by the specific error. For example: ./hsh: 1: qwerty: not found.
+
+Execution using fork and execve: When a command is entered, the shell creates a child process using fork(), then executes the command within it using execve(). If the command is a built-in, it is handled directly by the shell without creating a child process.
 
 ### Output
 
@@ -168,39 +168,91 @@ After the deadline, you will need to fork the repository if it’s not on your G
 
 ## The man page
 
+.TH simple_shell 1 "22/04/2025" "version 1.0"
+.SH NAME
+simple_shell \- A simple UNIX command line interpreter.
+
+.SH SYNOPSIS
+.B simple_shell
+.RI [ script_file ]
+
+.SH DESCRIPTION
+.B simple_shell
+is a simple implementation of a UNIX command line interpreter. It provides basic functionality for executing commands, handling built-in commands, and managing the environment.
+
+.SS Builtins
+The following built-in commands are supported:
+.TP
+.B exit
+Exit the shell. This command terminates the shell session.
+.TP
+.B env
+Print the current environment variables. Useful for debugging or scripting.
+
+.SH USAGE
+.TP
+.B Interactive mode:
+The shell displays a prompt and waits for the user to type a command. After executing the command, it displays the prompt again.
+.TP
+.B Non-interactive mode:
+The shell reads commands from a file or standard input and executes them.
+
+.SH EXAMPLES
+.TP
+.B Interactive mode:
+Run the shell and type commands:
+.EX
+$ ./hsh
+($) ls
+file1 file2
+($) exit
+.EE
+.TP
+.B Non-interactive mode:
+Provide commands via a script or pipe:
+.EX
+$ echo "ls" | ./hsh
+file1 file2
+.EE
+
+.SH AUTHORS
+.B Benjamin Estrada
+.RI ( https://github.com/Aluranae )
+.B Nawfel
+.RI ( https
 
 ## The Flowchart of Simple Shell
 
+## File Organisation
 
-## File organisation
-
-Le projet est structuré en plusieurs fichiers pour organiser le code de manière modulaire et maintenir une bonne lisibilité. Voici l'organisation des fichiers du projet :
+The project is structured into multiple files to organize the code clearly and modularly:
 
 ### 1. `shell_main.c`
-- **Description** : Point d'entrée principal du programme. Ce fichier contient la boucle principale du shell et gère l'interaction avec l'utilisateur.
-- **Responsabilités** :
-  - Affichage du prompt si le shell est en mode interactif.
-  - Lecture de l'entrée de l'utilisateur avec `getline()`.
-  - Découpage de l'entrée en arguments avec `strtok()`.
-  - Exécution des commandes internes ou externes (via `fork()` et `execve()`).
+- **Description**: Main entry point of the program. This file contains the main loop of the shell and handles user interaction.
+- **Responsibilities**:
+  - Displaying the prompt if the shell is running in interactive mode.
+  - Reading user input using `getline()`.
+  - Splitting the input into arguments using `strtok()`.
+  - Executing built-in or external commands (via `fork()` and `execve()`).
 
 ### 2. `builtins.c`
-- **Description** : Contient les fonctions pour gérer les commandes internes du shell.
-- **Responsabilités** :
-  - Gère les commandes internes comme `exit`, `cd`, `env`, et `pid`.
-  - Implémente les comportements spécifiques de ces commandes sans faire appel à un processus externe.
+- **Description**: Contains functions to handle the shell’s built-in commands.
+- **Responsibilities**:
+  - Handles built-in commands such as `exit`, `cd`, `env`, and `pid`.
+  - Implements specific behaviors for these commands without using external processes.
 
 ### 3. `pid.c`
-- **Description** : Ce fichier contient des fonctions liées à la gestion du PID (identifiant de processus).
-- **Responsabilités** :
-  - Fonction pour obtenir le PID du processus actuel via `getpid()`.
-  - Utilisé pour afficher le PID dans le shell lorsque l'utilisateur demande la commande `pid`.
+- **Description**: This file contains functions related to process ID (PID) handling.
+- **Responsibilities**:
+  - Provides a function to retrieve the current process ID using `getpid()`.
+  - Used to display the PID in the shell when the user invokes the `pid` command.
 
 ### 4. `shell.h`
-- **Description** : Fichier d'en-tête contenant les déclarations de fonctions et les bibliothèques nécessaires pour le projet.
-- **Responsabilités** :
-  - Déclarations des fonctions présentes dans `shell_main.c`, `builtins.c`, et `pid.c`.
-  - Inclusion des bibliothèques standard nécessaires (comme `stdio.h`, `stdlib.h`, `string.h`, etc.).
+- **Description**: Header file containing function declarations and necessary library includes for the project.
+- **Responsibilities**:
+  - Declares the functions implemented in `shell_main.c`, `builtins.c`, and `pid.c`.
+  - Includes standard libraries (such as `stdio.h`, `stdlib.h`, `string.h`, etc.).
+
 
 ---
 
