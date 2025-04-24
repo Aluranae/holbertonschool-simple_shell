@@ -10,35 +10,17 @@ The work had to follow strict technical guidelines, including rules on coding st
 
 ## Navigation
 
-- [Simple Shell](#simple-shell)
-  - [Welcome to the Simple Shell project !](#welcome-to-the-simple-shell-project-)
-  - [Navigation](#navigation)
-  - [Technical requirements and constraints](#technical-requirements-and-constraints)
-    - [Github](#github)
-  - [More Info](#more-info)
-    - [Output](#output)
-  - [List of allowed functions and system calls+](#list-of-allowed-functions-and-system-calls)
-    - [Compilation](#compilation)
-    - [Testing](#testing)
-    - [Checks](#checks)
-  - [Description of Simple shell](#description-of-simple-shell)
-  - [The man page](#the-man-page)
-  - [The Flowchart of Simple Shell](#the-flowchart-of-simple-shell)
-  - [File organisation](#file-organisation)
-  - [Main Functions \& Return Values](#main-functions--return-values)
-  - [Memory Leak Testing with Valgrind](#memory-leak-testing-with-valgrind)
-    - [The script](#the-script)
-    - [script results with memory leaks](#script-results-with-memory-leaks)
-    - [Script result with patched leaks](#script-result-with-patched-leaks)
-  - [Tests](#tests)
-  - [Examples](#examples)
-  - [🤝 How to Contribute](#-how-to-contribute)
-    - [🛠️ Local Setup](#️-local-setup)
-    - [🧪 Development Process](#-development-process)
-    - [✅ Testing](#-testing)
-    - [🔄 Pull Request](#-pull-request)
-    - [🙏 Code Review](#-code-review)
-  - [Authors](#authors)
+- [Technical requirements and constraints](#technical-requirements-and-constraints)
+- [Description of Simple Shell](#description-of-simple-shell)
+- [The man page](#the-man-page)
+- [The Flowchart of Simple Shell](#the-flowchart-of-simple-shell)
+- [File organisation](#file-organisation)
+- [Main Functions & Return Values](#main-functions--return-values)
+- [Memory Leak Testing with Valgrind](#memory-leak-testing-with-valgrind)
+- [Tests](#tests)
+- [Examples](#examples)
+- [How to contribute](#-how-to-contribute)
+- [Authors](#authors)
 
 ## Technical requirements and constraints
 
@@ -249,6 +231,10 @@ string_utils2.c is reserved for optional or bonus string functions, which may be
 - **Function**: `launch_process(char *path, char **args)`
   - **Description**: Forks the current process to execute a command via `execve`. The child process replaces its image with the command, while the parent waits for it to finish.
   - **Returns**: Always `1`, indicating that the shell should continue running (unless explicitly exited elsewhere).
+
+- **Function**: `is_executable(char *path, char **argv, int line_number, char *cmd_name)`
+  - **Description**: Checks whether the given path corresponds to a file with executable permissions. If not, it prints a formatted error message using `argv[0]` and the line number.
+  - **Returns**: `0` if the file is executable, `126` if permission is denied.
 
 - **Function**: `split_line(char *line)`
   - **Description**: Tokenizes user input into the command and its arguments, using spaces and newline characters as delimiters. Returns a NULL-terminated array of strings compatible with `execve`.
