@@ -188,6 +188,8 @@ Also responsible for finding the command path and launching child processes when
 `input_utils.c`: Handles input reading and preprocessing.
 Includes read_input, split_line, and is_line_empty for basic input preprocessing.
 
+`main.c`: Serves as the official entry point of the program. It contains the `main` function, which delegates execution to the core shell logic by calling `core_shell(argv)`. This structure ensures that the shell behaves correctly even in environments requiring a standard `main()` function.
+
 `main.h`: The main header file for the shell.
 Contains all function prototypes, macros, and include guards.
 It serves as the central point for shared declarations across all source files.
