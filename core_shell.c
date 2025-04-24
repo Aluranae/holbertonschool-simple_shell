@@ -43,14 +43,16 @@ int core_shell(char **argv)
 			continue;
 		}
 
-		/* Gestion de la commande "exit" */
-		if (handle_exit(args, line))
+		/* Vérifie si la commande est un builtin */
+		result = handle_builtin(args, line);
+		if (result == 1)
 		{
 			free(args);
 			free(line);
-			break;
+			continue;
 		}
 
+		/* Exécute les commandes externes */
 		result = execute_command(args, argv, line_number, line);
 		free(args);
 		free(line);
