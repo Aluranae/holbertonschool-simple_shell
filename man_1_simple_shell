@@ -1,31 +1,51 @@
-.TH simple_shell 1 "22/04/2025" "version 1.0"
+.TH hsh 1 "22/04/2025" "version 1.0"
 .SH NAME
 simple_shell \- A simple UNIX command line interpreter.
 
 .SH SYNOPSIS
-.B simple_shell
+.B hsh
 .RI [ script_file ]
 
 .SH DESCRIPTION
-.B simple_shell
-is a simple implementation of a UNIX command line interpreter. It provides basic functionality for executing commands, handling built-in commands, and managing the environment.
+.B hsh
+is a custom UNIX command line interpreter built as part of the Holberton School curriculum. It supports executing basic commands in interactive and non-interactive modes, mimicking some basic behavior of the standard shell.
 
-.SS Builtins
-The following built-in commands are supported:
+.SH FEATURES
 .TP
-.B exit
-Exit the shell. This command terminates the shell session.
-.TP
-.B env
-Print the current environment variables. Useful for debugging or scripting.
+\fBInteractive Mode\fP
+Displays a prompt ($) and waits for user input.
 
-.SH USAGE
 .TP
-.B Interactive mode:
-The shell displays a prompt and waits for the user to type a command. After executing the command, it displays the prompt again.
+\fBNon-Interactive Mode\fP
+Reads commands from standard input (e.g., from a pipe or a script).
+
 .TP
-.B Non-interactive mode:
-The shell reads commands from a file or standard input and executes them.
+\fBCommand Execution\fP
+Executes binary files found in directories listed in the PATH environment variable.
+
+.TP
+\fBPATH Resolution\fP
+Searches the PATH for commands if a relative path is not provided.
+
+.TP
+\fBBuilt-in Commands\fP
+\fBexit\fP: Exits the shell.
+.br
+\fBenv\fP: Prints the current environment.
+
+.TP
+\fBArguments\fP
+Supports passing arguments to commands (e.g., \fB/bin/ls -l\fP).
+
+.TP
+\fBError Handling\fP
+Prints a standardized error message when a command is not found or permission is denied.
+
+.TP
+\fBEOF Handling\fP
+Gracefully exits when it encounters EOF (Ctrl+D).
+.SH RETURN VALUE
+Returns the exit status of the executed command, or 127 if the command is not found, or 126 if permission is denied.
 
 .SH EXAMPLES
 .TP
