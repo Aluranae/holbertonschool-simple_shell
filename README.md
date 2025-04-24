@@ -1,4 +1,6 @@
-# Simple Shell !
+# Simple Shell
+
+> A custom Unix command-line interpreter written in C
 
 ## Welcome to the Simple Shell project !
 
@@ -17,7 +19,7 @@ The work had to follow strict technical guidelines, including rules on coding st
 - [Memory Leak Testing with Valgrind](#memory-leak-testing-with-valgrind)
 - [Tests](#tests)
 - [Examples](#examples)
-- [How to contribute](#how-to-contribute)
+- [How to contribute](#-how-to-contribute)
 - [Authors](#authors)
 
 ## Technical requirements and constraints
@@ -36,19 +38,7 @@ The work had to follow strict technical guidelines, including rules on coding st
 
 There should be one project repository per group. If you clone/fork/whatever a project repository with the same name before the second deadline, you risk a 0% score.
 
-## Description du Shell
-
-Simple Shell is a command-line interpreter written in C that allows the execution of commands in a Unix environment, just like a real terminal. It supports the following features:
-
-Interactive and non-interactive modes: The shell can operate in an interactive terminal, where users manually enter commands, or in a non-interactive mode, where it executes commands passed through a file or a pipe.
-
-Basic command execution: It allows execution of standard Unix commands such as /bin/ls, /bin/pwd, etc., just like a traditional shell.
-
-Built-in commands: The shell includes several built-in commands, such as exit (to exit the shell), cd (to change directories), env (to display environment variables), and pid (to display the current process ID).
-
-Error handling: The shell properly handles errors like "command not found" and displays clear messages indicating the program name followed by the specific error. For example: ./hsh: 1: qwerty: not found.
-
-Execution using fork and execve: When a command is entered, the shell creates a child process using fork(), then executes the command within it using execve(). If the command is a built-in, it is handled directly by the shell without creating a child process.
+## More Info
 
 ### Output
 
@@ -67,18 +57,15 @@ julien@ubuntu:/# echo "qwerty" | /bin/../bin/sh
 Same error with your program hsh:
 
 ```c
-
 julien@ubuntu:/# echo "qwerty" | ./hsh
 ./hsh: 1: qwerty: not found
 julien@ubuntu:/# echo "qwerty" | ./././hsh
 ./././hsh: 1: qwerty: not found
-
 ```
 
 ## List of allowed functions and system calls+
 
 ```c
-
 all functions from string.h
 access (man 2 access)
 chdir (man 2 chdir)
@@ -116,7 +103,6 @@ waitpid (man 2 waitpid)
 wait3 (man 2 wait3)
 wait4 (man 2 wait4)
 write (man 2 write)
-
 ```
 
 ### Compilation
@@ -124,9 +110,7 @@ write (man 2 write)
 - Your code will be compiled this way:
 
 ```c
-
 $ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -Wno-format *.c
-
 ```
 
 ### Testing
@@ -134,20 +118,17 @@ $ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -Wno-format *.c
 Your shell should work like this in interactive mode:
 
 ```c
-
 julien@ubuntu:/# ./hsh
 ($) /bin/ls
 hsh main.c shell.c
 ($)
 ($) exit
 julien@ubuntu:/#
-
 ```
 
 But also in non-interactive mode:
 
 ```c
-
 julien@ubuntu:/# echo "/bin/ls" | ./hsh
 hsh main.c shell.c test_ls_2
 julien@ubuntu:/# cat test_ls_2
@@ -157,7 +138,6 @@ julien@ubuntu:/# cat test_ls_2 | ./hsh
 hsh main.c shell.c test_ls_2
 hsh main.c shell.c test_ls_2
 julien@ubuntu:/#
-
 ```
 
 ### Checks
@@ -166,97 +146,266 @@ The Checker will be released at the end of the project (1-2 days before the dead
 
 After the deadline, you will need to fork the repository if it’s not on your Github account to be able to be corrected by the checker.
 
+## Description of Simple shell
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
+
+The Simple Shell project involves recreating a simplified command interpreter, similar to /bin/sh, in the C language. It is a program that allows the user to execute commands online, just like in a real Linux terminal.
+
 ## The man page
 
-.TH simple_shell 1 "22/04/2025" "version 1.0"
-.SH NAME
-simple_shell \- A simple UNIX command line interpreter.
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
 
-.SH SYNOPSIS
-.B simple_shell
-.RI [ script_file ]
+The command to call up the man page: `man ./man_1_simple_shell`
 
-.SH DESCRIPTION
-.B simple_shell
-is a simple implementation of a UNIX command line interpreter. It provides basic functionality for executing commands, handling built-in commands, and managing the environment.
-
-.SS Builtins
-The following built-in commands are supported:
-.TP
-.B exit
-Exit the shell. This command terminates the shell session.
-.TP
-.B env
-Print the current environment variables. Useful for debugging or scripting.
-
-.SH USAGE
-.TP
-.B Interactive mode:
-The shell displays a prompt and waits for the user to type a command. After executing the command, it displays the prompt again.
-.TP
-.B Non-interactive mode:
-The shell reads commands from a file or standard input and executes them.
-
-.SH EXAMPLES
-.TP
-.B Interactive mode:
-Run the shell and type commands:
-.EX
-$ ./hsh
-($) ls
-file1 file2
-($) exit
-.EE
-.TP
-.B Non-interactive mode:
-Provide commands via a script or pipe:
-.EX
-$ echo "ls" | ./hsh
-file1 file2
-.EE
-
-.SH AUTHORS
-.B Benjamin Estrada
-.RI ( https://github.com/Aluranae )
-.B Nawfel
-.RI ( https
+![Man page](images/man_page.png)
 
 ## The Flowchart of Simple Shell
 
-## File Organisation
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
 
-The project is structured into multiple files to organize the code clearly and modularly:
+Here is a global diagram of how our custom shell works.
+It follows the main execution loop of the shell, distinguishes internal commands (builtins) from external ones, and shows how errors are handled.
 
-### 1. `shell_main.c`
-- **Description**: Main entry point of the program. This file contains the main loop of the shell and handles user interaction.
-- **Responsibilities**:
-  - Displaying the prompt if the shell is running in interactive mode.
-  - Reading user input using `getline()`.
-  - Splitting the input into arguments using `strtok()`.
-  - Executing built-in or external commands (via `fork()` and `execve()`).
+![Flowchart](images/Flowchart_Shell.png)
 
-### 2. `builtins.c`
-- **Description**: Contains functions to handle the shell’s built-in commands.
-- **Responsibilities**:
-  - Handles built-in commands such as `exit`, `cd`, `env`, and `pid`.
-  - Implements specific behaviors for these commands without using external processes.
+## File organisation
 
-### 3. `pid.c`
-- **Description**: This file contains functions related to process ID (PID) handling.
-- **Responsibilities**:
-  - Provides a function to retrieve the current process ID using `getpid()`.
-  - Used to display the PID in the shell when the user invokes the `pid` command.
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
 
-### 4. `shell.h`
-- **Description**: Header file containing function declarations and necessary library includes for the project.
-- **Responsibilities**:
-  - Declares the functions implemented in `shell_main.c`, `builtins.c`, and `pid.c`.
-  - Includes standard libraries (such as `stdio.h`, `stdlib.h`, `string.h`, etc.).
+`builtin_utils.c`: Contains the implementation of built-in command handlers such as exit and env.
+These functions allow the shell to handle internal commands without invoking external programs.
 
+`core_shell.c`: Implements the core loop of the shell, including prompt display, input reading, tokenizing, and dispatching commands.
+It handles both interactive and non-interactive modes.
+
+`env_utils.c`: Provides utility functions for environment variable handling.
+Includes a custom implementation of _getenv to fetch environment variable values without using the standard library’s getenv.
+
+`execute_command.c`: Manages the execution of external commands using fork, execve, and wait.
+Also responsible for finding the command path and launching child processes when necessary.
+
+`input_utils.c`: Handles input reading and preprocessing.
+Includes read_input, split_line, and is_line_empty for basic input preprocessing.
+
+`main.h`: The main header file for the shell.
+Contains all function prototypes, macros, and include guards.
+It serves as the central point for shared declarations across all source files.
+
+`string_utils.c` & `string_utils2.c`: Contain helper functions for basic string manipulation.
+string_utils.c includes general-purpose utilities used throughout the shell.
+string_utils2.c is reserved for optional or bonus string functions, which may be added later depending on project progress.
+
+## Main Functions & Return Values
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
+
+- **Function**: `handle_exit(char **args, char *line)`
+  - **Description**: Checks whether the user entered the `exit` command. If so, it frees the input line and terminates the shell process.
+  - **Returns**: `1` if the shell should terminate, `0` otherwise.
+
+- **Function**: `handle_env(char **args, char *line)`
+  - **Description**: Checks whether the user entered the `env` command. If so, prints all the current environment variables to the standard output.
+  - **Returns**: `1` if the command was recognized and handled, `0` otherwise.
+
+- **Function**: `handle_builtin(char **args, char *line)`
+  - **Description**: Checks if the command entered is a built-in (`env`, `exit`, etc.) and calls the appropriate internal function.
+  - **Returns**: `1` if a built-in command was recognized and executed, `0` otherwise.
+
+- **Function**: `main(int argc, char **argv)`
+  - **Description**: Entry point of the shell. Runs the main loop that displays the prompt, reads and parses user input, executes commands, and handles memory cleanup.
+  - **Returns**: Always `0` (unless forcibly exited by a signal or internal call to `exit()`).
+
+- **Function**: `_getenv(const char *name)`
+  - **Description**: Searches for an environment variable by name and returns a pointer to its value (the part after the `=` sign).
+  - **Returns**: A pointer to the variable's value if found, or `NULL` if the variable does not exist or if the input is `NULL`.
+
+- **Function**: `find_command_path(char *command)`
+  - **Description**: Searches the directories listed in the `PATH` environment variable to find the absolute path of a given command.
+  - **Returns**: A newly allocated string containing the full path if the command is found and executable, or `NULL` if not found or if an error occurs.
+
+- **Function**: `execute_command(char **args, char **argv, int line_number, char *line)`
+  - **Description**: Handles the execution of a user-entered command. Checks for built-ins, resolves the full path using `PATH`, verifies execution permissions, and initiates the process if valid.
+  - **Returns**: `0` if a built-in was executed, `1` to continue the main loop, `127` if the command was not found, or `126` if permission was denied.
+
+- **Function**: `launch_process(char *path, char **args)`
+  - **Description**: Forks the current process to execute a command via `execve`. The child process replaces its image with the command, while the parent waits for it to finish.
+  - **Returns**: Always `1`, indicating that the shell should continue running (unless explicitly exited elsewhere).
+
+- **Function**: `split_line(char *line)`
+  - **Description**: Tokenizes user input into the command and its arguments, using spaces and newline characters as delimiters. Returns a NULL-terminated array of strings compatible with `execve`.
+  - **Returns**: A dynamically allocated array of strings (tokens), or `NULL` if memory allocation fails.
+
+- **Function**: `read_input(void)`
+  - **Description**: Reads a full line from standard input using `getline`. Automatically allocates memory and resizes the buffer as needed.
+  - **Returns**: A pointer to the input string (must be freed by the caller), or `NULL` if end-of-file is reached (Ctrl+D) or an error occurs.
+
+- **Function**: `is_line_empty(const char *line)`
+  - **Description**: Checks whether a line is empty or only contains whitespace characters such as spaces, tabs, or newlines.
+  - **Returns**: `1` if the line is empty or insignificant, `0` otherwise.
+
+- **Function**: `free_args(char **args)`
+  - **Description**: Frees the dynamically allocated array of strings used to store command arguments, if not `NULL`.
+  - **Returns**: Nothing (`void` function).
+
+
+## Memory Leak Testing with Valgrind
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
+
+Throughout the development of the Simple Shell project, we consistently used Valgrind to detect and fix memory leaks. Each dynamically allocated memory block (such as user input, tokenized arguments, and command paths) is carefully freed before the program exits or restarts its main loop.
+
+We ran the shell through `valgrind --leak-check=full --show-leak-kinds=all` with a variety of interactive and non-interactive tests, including built-in commands (env, exit), valid and invalid external commands (ls, /bin/ls, unknown commands), and EOF handling (Ctrl+D).
+
+After refining our main, split_line, find_command_path, and execute_command functions, Valgrind confirmed that no memory was definitely lost and no blocks were indirectly or possibly leaked. Only a small still reachable block remained due to the program terminating with exit, which does not impact memory safety.
+
+✔️ Our shell now passes all memory checks with 0 leaks, ensuring robust and secure memory management.
+
+### The script
+
+![Valgrind script example](images/valgrind_script.png)
+
+### script results with memory leaks
+
+![Valgrind Results](images/rapport_valgrind_fuites.png)
+
+### Script result with patched leaks 
+
+![Valgrind Results](images/valgrind_results.png)
+
+## Tests
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
+
+Throughout the assembly of our Simple Shell, we conducted targeted tests for each crucial function to ensure reliability and correctness. Functions like _getenv, split_line, read_input, handle_builtin, handle_exit, handle_env, and others were individually tested using dedicated scenarios to validate their behavior in isolation. The test source files themselves were documented through screenshots, showcasing the logic and structure used to verify correctness, edge cases, and memory safety. This methodical approach allowed us to identify bugs early, refine our logic incrementally, and ensure full integration compatibility across the project.
+
+<p align="center">
+  <img src="images/read_input_test.png" width="300" />
+  <img src="images/split_line_test.png" width="300" />
+</p>
+
+<p align="center">
+  <img src="images/is_line_empty_test.png" width="300" />
+  <img src="images/red_split_empty_test.png" width="300" />
+</p>
+
+<p align="center">
+  <img src="images/handle_exit_test.png" width="300" />
+  <img src="images/handle_en_test.png" width="300" />
+</p>
+
+<p align="center">
+  <img src="images/handle_builtin_test.png" width="300" />
+  <img src="images/_getenv_test.png" width="300" />
+</p>
+
+<p align="center">
+  <img src="images/interactif_test.png" width="300" />
+  <img src="images/mini_shell_test.png" width="300" />
+</p>
+
+## Examples
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
+
+Here is a simple usage example of our custom shell in interactive mode:
+
+```bash
+$ ./hsh
+($) ls
+README.md  main.c  input_utils.c  hsh  builtins.c
+($) echo "Hello, Shell!"
+Hello, Shell!
+($) /bin/ls
+README.md  main.c  input_utils.c  hsh  builtins.c
+($) qwerty
+./hsh: 1: qwerty: not found
+($) env
+USER=student
+HOME=/home/student
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin
+...
+($) exit
+$
+```
+
+> ⚠️ This shell supports both **interactive mode** and **non-interactive mode**:
+
+**Non-interactive mode example:**
+
+```bash
+$ echo "ls" | ./hsh
+README.md  main.c  input_utils.c  hsh  builtins.c
+```
+
+## 🤝 How to Contribute
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
+
+Contributions, issues and feature requests are welcome!
+
+If you want to contribute to this project, here’s how we suggest proceeding — based on our collaborative workflow during the development of *Simple Shell*:
+
+### 🛠️ Local Setup
+
+1. **Fork the repository** to your GitHub account.
+2. **Clone your fork** locally:
+
+   ```sh
+   git clone https://github.com/<your-username>/simple_shell.git
+   ```
+
+3. Create a new branch for your changes:
+
+   ```sh
+   git checkout -b feature/your-feature-name
+   ```
+
+### 🧪 Development Process
+
+- Stick to the Holberton School constraints (Betty style, memory checks, etc).
+- Keep functions small (max 5 per file).
+- Respect modularity: one responsibility per function/file.
+- Document your functions clearly (description + parameters + return).
+- Make sure your code compiles with:
+
+  ```sh
+  gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+  ```
+
+### ✅ Testing
+
+We recommend creating a dedicated test file or using interactive/non-interactive tests as shown in the project examples.  
+Make sure your changes do not break existing features.
+
+### 🔄 Pull Request
+
+1. **Commit your changes** clearly:
+
+   ```sh
+   git add .
+   git commit -m "Add: description of the change"
+   git push origin feature/your-feature-name
+   ```
+
+2. **Open a Pull Request** from your branch to the `main` branch of the original repo.
+3. In your PR description, include:
+   - What you changed
+   - Why you changed it
+   - Any questions or areas you'd like review on
+
+### 🙏 Code Review
+
+Once your PR is open, teammates will review your code. Be open to suggestions!  
+Reviews are part of the learning process — don’t hesitate to ask questions.
 
 ---
 
+> 🔁 This section is based on our real workflow during the development of *Simple Shell*, where we focused on code quality, communication, and Git best practices.
+
 ## Authors
+
+<p align="right"><a href="#navigation">↑ Back to Navigation</a></p>
 
 [Benjamin Estrada](https://github.com/Aluranae)  
 [Nawfel](https://github.com/nawfel83)  
